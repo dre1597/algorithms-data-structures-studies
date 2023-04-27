@@ -149,6 +149,11 @@ export class SinglyLinkedList<T> {
     }
   }
 
+  public clear(): void {
+    this.head = null;
+    this.size = 0;
+  }
+
   public toString(): string {
     let current = this.head;
     let string = '';

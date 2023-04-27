@@ -176,6 +176,16 @@ describe('SinglyLinkedList', () => {
     });
   });
 
+  describe('clear', () => {
+    it('should clear the list', () => {
+      const list = generateNonEmptyList();
+
+      list.clear();
+
+      expect(list.size).toBe(0);
+    });
+  });
+
   describe('toString', () => {
     it('should print the list', () => {
       const list = new SinglyLinkedList<number>();
