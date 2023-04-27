@@ -21,10 +21,14 @@ describe('SinglyLinkedList', () => {
     });
 
     it('should throw OutOfBoundsError if didnt pass a valid index', () => {
-      const list = generateNonEmptyList();
+      const list1 = generateEmptyList();
 
-      expect(() => list.getByIndex(-1)).toThrow(OutOfBoundsError);
-      expect(() => list.getByIndex(list.size)).toThrow(OutOfBoundsError);
+      expect(() => list1.getByIndex(0)).toThrow(OutOfBoundsError);
+
+      const list2 = generateNonEmptyList();
+
+      expect(() => list2.getByIndex(-1)).toThrow(OutOfBoundsError);
+      expect(() => list2.getByIndex(list2.size)).toThrow(OutOfBoundsError);
     });
   });
 
@@ -34,12 +38,14 @@ describe('SinglyLinkedList', () => {
       list1.unshift('any_data');
 
       expect(list1.getByIndex(0)).toBe('any_data');
+      expect(list1.size).toBe(1);
 
       const list2 = generateNonEmptyList();
 
       list2.unshift('any_data');
 
       expect(list2.getByIndex(0)).toBe('any_data');
+      expect(list2.size).toBe(4);
     });
   });
 
@@ -49,12 +55,14 @@ describe('SinglyLinkedList', () => {
       list1.push('any_data');
 
       expect(list1.getByIndex(list1.size - 1)).toBe('any_data');
+      expect(list1.size).toBe(1);
 
       const list2 = generateNonEmptyList();
 
       list2.push('any_data');
 
       expect(list2.getByIndex(list2.size - 1)).toBe('any_data');
+      expect(list2.size).toBe(4);
     });
   });
 
@@ -64,22 +72,26 @@ describe('SinglyLinkedList', () => {
       list1.add(0, 'any_data');
 
       expect(list1.getByIndex(0)).toBe('any_data');
+      expect(list1.size).toBe(1);
 
       const list2 = generateNonEmptyList();
       list2.add(0, 'any_data');
 
       expect(list2.getByIndex(0)).toBe('any_data');
+      expect(list2.size).toBe(4);
 
       const list3 = generateNonEmptyList();
       list3.add(2, 'any_data');
 
       expect(list3.getByIndex(2)).toBe('any_data');
+      expect(list3.size).toBe(4);
 
       const list4 = generateNonEmptyList();
 
       list4.add(list4.size, 'any_data');
 
       expect(list4.getByIndex(list4.size - 1)).toBe('any_data');
+      expect(list3.size).toBe(4);
     });
 
     it('should throw OutOfBoundsError if didnt pass a valid index', () => {
@@ -97,9 +109,11 @@ describe('SinglyLinkedList', () => {
     it('should remove from front', () => {
       const list1 = generateEmptyList();
 
+      list1.unshift('any_data');
       list1.shift();
 
-      expect(list1.getByIndex(0)).toBe(null);
+      expect(() => list1.getByIndex(0)).toThrow(OutOfBoundsError);
+      expect(list1.size).toBe(0);
 
       const list2 = generateNonEmptyList();
 
@@ -107,6 +121,13 @@ describe('SinglyLinkedList', () => {
       list2.shift();
 
       expect(list2.getByIndex(0)).not.toBe('any_data');
+      expect(list2.size).toBe(3);
+    });
+
+    it('should not throw if the list is empty', () => {
+      const list = generateEmptyList();
+      expect(() => list.shift()).not.toThrow();
+      expect(list.size).toBe(0);
     });
   });
 
@@ -116,22 +137,32 @@ describe('SinglyLinkedList', () => {
 
       list1.pop();
 
-      expect(list1.getByIndex(list1.size - 1)).toBe(null);
+      expect(() => list1.getByIndex(0)).toThrow(OutOfBoundsError);
+      expect(list1.size).toBe(0);
 
       const list2 = generateEmptyList();
 
-      list2.push('any_data1');
-
+      list2.push('any_data');
       list2.pop();
 
-      expect(list2.getByIndex(list2.size - 1)).not.toBe('any_data1');
+      expect(() => list2.getByIndex(list2.size - 1)).toThrow(OutOfBoundsError);
+      expect(list2.size).toBe(1);
 
-      const list3 = generateNonEmptyList();
+      const list3 = generateEmptyList();
 
       list3.push('any_data');
       list3.pop();
 
-      expect(list3.getByIndex(list3.size - 1)).not.toBe('any_data');
+      expect(() => list3.getByIndex(list3.size - 1)).toThrow(OutOfBoundsError);
+      expect(list3.size).toBe(1);
+
+      const list4 = generateNonEmptyList();
+
+      list4.push('any_data');
+      list4.pop();
+
+      expect(list4.getByIndex(list4.size - 1)).not.toBe('any_data');
+      expect(list4.size).toBe(3);
     });
   });
 
@@ -139,9 +170,8 @@ describe('SinglyLinkedList', () => {
     it('should remove from index', () => {
       const list1 = generateEmptyList();
 
-      list1.remove(0);
-
-      expect(list1.getByIndex(0)).toBe(null);
+      expect(() => list1.remove(0)).toThrow(OutOfBoundsError);
+      expect(list1.size).toBe(0);
 
       const list2 = generateNonEmptyList();
 
@@ -149,6 +179,7 @@ describe('SinglyLinkedList', () => {
       list2.remove(0);
 
       expect(list2.getByIndex(0)).not.toBe('any_data');
+      expect(list2.size).toBe(3);
 
       const list3 = generateNonEmptyList();
 
@@ -157,6 +188,7 @@ describe('SinglyLinkedList', () => {
       list3.remove(list3.size - 1);
 
       expect(list3.getByIndex(list3.size - 1)).not.toBe('any_data');
+      expect(list3.size).toBe(3);
 
       const list4 = generateNonEmptyList();
 
@@ -165,6 +197,7 @@ describe('SinglyLinkedList', () => {
       list4.remove(2);
 
       expect(list4.getByIndex(1)).not.toBe('any_data');
+      expect(list4.size).toBe(3);
     });
 
     it('should throw OutOfBoundsError if didnt pass a valid index', () => {
