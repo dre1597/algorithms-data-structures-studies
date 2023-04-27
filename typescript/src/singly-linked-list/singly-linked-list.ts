@@ -15,19 +15,24 @@ export class OutOfBoundsError extends Error {
 }
 
 export class SinglyLinkedList<T> {
-  public size = 0;
-  private head: LLNode<T> | null = null;
+  private _head: LLNode<T> | null = null;
+
+  private _size = 0;
+
+  get size(): number {
+    return this._size;
+  }
 
   public getByIndex(index: number): T | null {
-    if (this.size === 0 || this.head === null) {
+    if (this._size === 0 || this._head === null) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
-    if (index < 0 || index >= this.size) {
+    if (index < 0 || index >= this._size) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
-    let current = this.head;
+    let current = this._head;
     for (let i = 0; i < index; i++) {
       if (current.next) {
         current = current.next;
@@ -39,43 +44,43 @@ export class SinglyLinkedList<T> {
 
   public unshift(data: T): void {
     const node = new LLNode(data);
-    node.next = this.head;
-    this.head = node;
-    this.size++;
+    node.next = this._head;
+    this._head = node;
+    this._size++;
   }
 
   public push(data: T): void {
     const node = new LLNode(data);
-    if (!this.head) {
-      this.head = node;
+    if (!this._head) {
+      this._head = node;
     } else {
-      let current = this.head;
+      let current = this._head;
       while (current.next) {
         current = current.next;
       }
       current.next = node;
     }
-    this.size++;
+    this._size++;
   }
 
   public add(index: number, data: T): void {
-    if (index < 0 || index > this.size) {
+    if (index < 0 || index > this._size) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
-    if (index === 0 || this.head === null) {
+    if (index === 0 || this._head === null) {
       this.unshift(data);
       return;
     }
 
-    if (index === this.size || this.head.next === null) {
+    if (index === this._size || this._head.next === null) {
       this.push(data);
       return;
     }
 
     const node = new LLNode(data);
 
-    let current = this.head;
+    let current = this._head;
 
     for (let i = 0; i < index - 1; i++) {
       if (current.next) {
@@ -87,42 +92,42 @@ export class SinglyLinkedList<T> {
 
     current.next = node;
 
-    this.size++;
+    this._size++;
   }
 
   public shift(): void {
-    if (!this.head) {
+    if (!this._head) {
       return;
     }
-    this.head = this.head.next;
-    this.size--;
+    this._head = this._head.next;
+    this._size--;
   }
 
   public pop(): void {
-    if (!this.head) {
+    if (!this._head) {
       return;
     }
 
-    if (!this.head.next) {
-      this.head = null;
-      this.size--;
+    if (!this._head.next) {
+      this._head = null;
+      this._size--;
       return;
     }
 
-    let current = this.head;
+    let current = this._head;
     while (current.next?.next) {
       current = current.next;
     }
     current.next = null;
-    this.size--;
+    this._size--;
   }
 
   public remove(index: number): void {
-    if (this.size === 0 || this.head === null) {
+    if (this._size === 0 || this._head === null) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
-    if (index < 0 || index >= this.size) {
+    if (index < 0 || index >= this._size) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
@@ -131,12 +136,12 @@ export class SinglyLinkedList<T> {
       return;
     }
 
-    if (index === this.size - 1) {
+    if (index === this._size - 1) {
       this.pop();
       return;
     }
 
-    let current = this.head;
+    let current = this._head;
 
     for (let i = 0; i < index - 1; i++) {
       if (current.next) {
@@ -146,17 +151,17 @@ export class SinglyLinkedList<T> {
 
     if (current.next?.next) {
       current.next = current.next.next;
-      this.size--;
+      this._size--;
     }
   }
 
   public clear(): void {
-    this.head = null;
-    this.size = 0;
+    this._head = null;
+    this._size = 0;
   }
 
   public toString(): string {
-    let current = this.head;
+    let current = this._head;
     let string = '';
     while (current) {
       string += current.data + ' ';
