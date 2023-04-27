@@ -24,7 +24,7 @@ export class SinglyLinkedList<T> {
   }
 
   public getByIndex(index: number): T | null {
-    if (this._size === 0 || this._head === null) {
+    if (this.isEmpty() || this._head === null) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
@@ -123,7 +123,7 @@ export class SinglyLinkedList<T> {
   }
 
   public remove(index: number): void {
-    if (this._size === 0 || this._head === null) {
+    if (this.isEmpty() || this._head === null) {
       throw new OutOfBoundsError('Index out of bounds');
     }
 
