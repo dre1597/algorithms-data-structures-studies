@@ -155,6 +155,10 @@ export class SinglyLinkedList<T> {
     }
   }
 
+  public isEmpty(): boolean {
+    return this._size === 0;
+  }
+
   public clear(): void {
     this._head = null;
     this._size = 0;

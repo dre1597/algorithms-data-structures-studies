@@ -13,6 +13,14 @@ const generateNonEmptyList = (): SinglyLinkedList<string> => {
 };
 
 describe('SinglyLinkedList', () => {
+  describe('size', () => {
+    it('should get size', () => {
+      const list = generateNonEmptyList();
+
+      expect(list.size).toBe(3);
+    });
+  });
+
   describe('getByIndex', () => {
     it('should get by index', () => {
       const list = generateNonEmptyList();
@@ -216,6 +224,20 @@ describe('SinglyLinkedList', () => {
       list.clear();
 
       expect(list.size).toBe(0);
+    });
+  });
+
+  describe('isEmpty', () => {
+    it('should return true if the list is empty', () => {
+      const list = generateEmptyList();
+
+      expect(list.isEmpty()).toBe(true);
+    });
+
+    it('should return false if the list is not empty', () => {
+      const list = generateNonEmptyList();
+
+      expect(list.isEmpty()).toBe(false);
     });
   });
 
