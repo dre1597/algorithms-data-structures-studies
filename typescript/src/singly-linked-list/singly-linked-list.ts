@@ -105,6 +105,7 @@ export class SinglyLinkedList<T> {
 
     if (!this.head.next) {
       this.head = null;
+      this.size--;
       return;
     }
 

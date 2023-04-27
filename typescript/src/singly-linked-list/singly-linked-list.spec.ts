@@ -146,7 +146,7 @@ describe('SinglyLinkedList', () => {
       list2.pop();
 
       expect(() => list2.getByIndex(list2.size - 1)).toThrow(OutOfBoundsError);
-      expect(list2.size).toBe(1);
+      expect(list2.size).toBe(0);
 
       const list3 = generateEmptyList();
 
@@ -154,7 +154,7 @@ describe('SinglyLinkedList', () => {
       list3.pop();
 
       expect(() => list3.getByIndex(list3.size - 1)).toThrow(OutOfBoundsError);
-      expect(list3.size).toBe(1);
+      expect(list3.size).toBe(0);
 
       const list4 = generateNonEmptyList();
 
