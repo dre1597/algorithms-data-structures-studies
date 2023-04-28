@@ -1,27 +1,31 @@
 export class Queue<T> {
   private items: T[] = [];
 
-  enqueue(item: T) {
+  public enqueue(item: T) {
     this.items.push(item);
   }
 
-  dequeue() {
+  public dequeue() {
     return this.items.shift();
   }
 
-  peek() {
+  public peek() {
     return this.items[0];
   }
 
-  isEmpty() {
+  public isEmpty() {
     return this.items.length === 0;
   }
 
-  size() {
+  public size() {
     return this.items.length;
   }
 
-  clear() {
+  public clear() {
     this.items = [];
+  }
+
+  public toString(): string {
+    return this.items.toString();
   }
 }
