@@ -1,27 +1,31 @@
 export class Stack<T> {
   private items: T[] = [];
 
-  push(item: T): void {
+  public push(item: T): void {
     this.items.push(item);
   }
 
-  pop(): T | undefined {
+  public pop(): T | undefined {
     return this.items.pop();
   }
 
-  peek(): T | undefined {
+  public peek(): T | undefined {
     return this.items[this.items.length - 1];
   }
 
-  isEmpty(): boolean {
+  public isEmpty(): boolean {
     return this.items.length === 0;
   }
 
-  size(): number {
+  public size(): number {
     return this.items.length;
   }
 
-  clear(): void {
+  public clear(): void {
     this.items = [];
+  }
+
+  public toString(): string {
+    return this.items.slice().reverse().join(',');
   }
 }
