@@ -187,6 +187,30 @@ export class DoublyLinkedList<T> {
     this._size = 0;
   }
 
+  public contains(data: T): boolean {
+    let temp = this._head;
+    while (temp !== null) {
+      if (temp.data === data) {
+        return true;
+      }
+      temp = temp.next;
+    }
+    return false;
+  }
+
+  public indexOf(data: T): number {
+    let temp = this._head;
+    let index = 0;
+    while (temp !== null) {
+      if (temp.data === data) {
+        return index;
+      }
+      temp = temp.next;
+      index++;
+    }
+    return -1;
+  }
+
   public isEmpty(): boolean {
     return this._size === 0;
   }
