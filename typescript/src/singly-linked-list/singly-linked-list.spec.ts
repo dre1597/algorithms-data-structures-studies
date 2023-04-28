@@ -227,6 +227,38 @@ describe('SinglyLinkedList', () => {
     });
   });
 
+  describe('contains', () => {
+    it('should return true if the list contains the data', () => {
+      const list = generateNonEmptyList();
+      list.push('any_data');
+
+      expect(list.contains('any_data')).toBe(true);
+      expect(list.contains('invalid_data')).toBe(false);
+    });
+  });
+
+  describe('indexOf', () => {
+    it('should return the index of the data', () => {
+      const list = generateNonEmptyList();
+
+      expect(list.indexOf('any_data1')).toBe(0);
+
+      list.push('data1');
+
+      expect(list.indexOf('data1')).toBe(3);
+
+      list.add(1, 'data2');
+
+      expect(list.indexOf('data2')).toBe(1);
+    });
+
+    it('should return -1 if the data is not in the list', () => {
+      const list = generateNonEmptyList();
+
+      expect(list.indexOf('invalid_data')).toBe(-1);
+    });
+  });
+
   describe('isEmpty', () => {
     it('should return true if the list is empty', () => {
       const list = generateEmptyList();

@@ -155,6 +155,30 @@ export class SinglyLinkedList<T> {
     }
   }
 
+  public contains(data: T): boolean {
+    let current = this._head;
+    while (current) {
+      if (current.data === data) {
+        return true;
+      }
+      current = current.next;
+    }
+    return false;
+  }
+
+  public indexOf(data: T): number {
+    let current = this._head;
+    let index = 0;
+    while (current) {
+      if (current.data === data) {
+        return index;
+      }
+      current = current.next;
+      index++;
+    }
+    return -1;
+  }
+
   public isEmpty(): boolean {
     return this._size === 0;
   }
