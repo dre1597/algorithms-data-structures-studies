@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { DoublyLinkedList, OutOfBoundsError } from './doubly-linked-list';
-import { SinglyLinkedList } from '../singly-linked-list/singly-linked-list';
 
 const generateEmptyList = (): DoublyLinkedList<string> =>
   new DoublyLinkedList<string>();
@@ -189,11 +188,8 @@ describe('DoublyLinkedList', () => {
 
       const list4 = generateNonEmptyList();
 
-      console.log(list4.toString());
       list4.add(2, 'any_data');
-      console.log(list4.toString());
       list4.remove(2);
-      console.log(list4.toString());
       expect(list4.getByIndex(1)).not.toBe('any_data');
       expect(list4.size).toBe(5);
     });
@@ -266,12 +262,12 @@ describe('DoublyLinkedList', () => {
 
   describe('toString', () => {
     it('should print the list', () => {
-      const list = new SinglyLinkedList<number>();
-      list.push(1);
-      list.push(2);
-      list.push(3);
+      const list = generateEmptyList();
+      list.push('any_data1');
+      list.push('any_data2');
+      list.push('any_data3');
 
-      expect(list.toString()).toBe('1 2 3');
+      expect(list.toString()).toBe('any_data1 any_data2 any_data3');
     });
   });
 });
