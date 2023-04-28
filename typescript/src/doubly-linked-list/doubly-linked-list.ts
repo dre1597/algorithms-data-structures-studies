@@ -128,7 +128,76 @@ export class DoublyLinkedList<T> {
     this._size--;
   }
 
+  public pop(): void {
+    if (this.isEmpty() && !this._head && !this._tail) {
+      return;
+    }
+
+    if (this.size === 1) {
+      this._head = null;
+      this._tail = null;
+      this._size--;
+      return;
+    }
+
+    if (this._tail?.prev) {
+      this._tail = this._tail.prev;
+      this._tail.next = null;
+      this._size--;
+    }
+  }
+
+  public remove(index: number): void {
+    if (this.isEmpty() || this._head === null || this._tail === null) {
+      throw new OutOfBoundsError('Index out of bounds');
+    }
+
+    if (index < 0 || index >= this._size) {
+      throw new OutOfBoundsError('Index out of bounds');
+    }
+
+    if (index === 0) {
+      this.shift();
+      return;
+    }
+
+    if (index === this._size - 1) {
+      this.pop();
+      return;
+    }
+
+    let current = this._head;
+
+    for (let i = 0; i < index; i++) {
+      if (current.next) {
+        current = current.next;
+      }
+    }
+
+    if (current.prev && current.next) {
+      current.prev.next = current.next;
+      current.next.prev = current.prev;
+    }
+    this._size--;
+  }
+
+  public clear(): void {
+    this._head = null;
+    this._tail = null;
+    this._size = 0;
+  }
+
   public isEmpty(): boolean {
     return this._size === 0;
+  }
+
+  public toString(): string {
+    let temp = this._head;
+    let string = '';
+    while (temp !== null) {
+      string += temp.data + ' ';
+      temp = temp.next;
+    }
+    return string.trim();
   }
 }

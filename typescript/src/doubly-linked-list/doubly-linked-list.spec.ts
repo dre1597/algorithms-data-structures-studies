@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DoublyLinkedList, OutOfBoundsError } from './doubly-linked-list';
+import { SinglyLinkedList } from '../singly-linked-list/singly-linked-list';
 
 const generateEmptyList = (): DoublyLinkedList<string> =>
   new DoublyLinkedList<string>();
@@ -133,6 +134,112 @@ describe('DoublyLinkedList', () => {
       const list = generateEmptyList();
       expect(() => list.shift()).not.toThrow();
       expect(list.size).toBe(0);
+    });
+  });
+
+  describe('pop', () => {
+    it('should remove from back', () => {
+      const list1 = generateEmptyList();
+      list1.pop();
+
+      expect(() => list1.getByIndex(0)).toThrow(OutOfBoundsError);
+      expect(list1.size).toBe(0);
+
+      const list2 = generateEmptyList();
+
+      list2.push('any_data');
+      list2.pop();
+
+      expect(() => list2.getByIndex(0)).toThrow(OutOfBoundsError);
+      expect(list2.size).toBe(0);
+
+      const list3 = generateNonEmptyList();
+
+      list3.push('any_data');
+      list3.pop();
+
+      expect(() => list3.getByIndex(0)).not.toBe('any_data');
+      expect(list3.size).toBe(5);
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove from index', () => {
+      const list1 = generateEmptyList();
+
+      expect(() => list1.remove(0)).toThrow(OutOfBoundsError);
+      expect(list1.size).toBe(0);
+
+      const list2 = generateNonEmptyList();
+
+      list2.push('any_data');
+      list2.remove(0);
+
+      expect(list2.getByIndex(0)).not.toBe('any_data');
+      expect(list2.size).toBe(5);
+
+      const list3 = generateNonEmptyList();
+
+      list3.push('any_data');
+
+      list3.remove(list3.size - 1);
+
+      expect(list3.getByIndex(list3.size - 1)).not.toBe('any_data');
+      expect(list3.size).toBe(5);
+
+      const list4 = generateNonEmptyList();
+
+      console.log(list4.toString());
+      list4.add(2, 'any_data');
+      console.log(list4.toString());
+      list4.remove(2);
+      console.log(list4.toString());
+      expect(list4.getByIndex(1)).not.toBe('any_data');
+      expect(list4.size).toBe(5);
+    });
+
+    it('should throw OutOfBoundsError if didnt pass a valid index', () => {
+      const list = generateNonEmptyList();
+
+      expect(() => list.remove(-1)).toThrow(OutOfBoundsError);
+
+      expect(() => list.remove(list.size)).toThrow(OutOfBoundsError);
+    });
+  });
+
+  describe('clear', () => {
+    it('should clear the list', () => {
+      const list = generateNonEmptyList();
+
+      list.clear();
+
+      expect(list.size).toBe(0);
+      expect(list.toString()).toBe('');
+    });
+  });
+
+  describe('isEmpty', () => {
+    it('should return true if the list is empty', () => {
+      const list = generateEmptyList();
+
+      expect(list.isEmpty()).toBe(true);
+    });
+
+    it('should return false if the list is not empty', () => {
+      const list = generateNonEmptyList();
+
+      expect(list.isEmpty()).toBe(false);
+    });
+  });
+
+  describe('toString', () => {
+    it('should print the list', () => {
+      const list = new SinglyLinkedList<number>();
+      list.push(1);
+      list.push(2);
+      list.push(3);
+
+      expect(list.toString()).toBe('1 2 3');
     });
   });
 });
