@@ -21,17 +21,49 @@ export class MinHeap<T> {
     }
   }
 
+  extract(): T | undefined {
+    if (this.isEmpty()) {
+      return undefined;
+    }
+
+    if (this.size() === 1) {
+      return this.heap.pop();
+    }
+
+    const value = this.heap[0];
+    const lastElement = this.heap.pop();
+
+    if (lastElement) {
+      this.heap[0] = lastElement;
+    }
+
+    this._siftDown(0);
+    return value;
+  }
+
+  public heapify(array: T[]): T[] {
+    if (array) {
+      this.heap = array;
+    }
+
+    const maxIndex = Math.floor(this.size() / 2) - 1;
+
+    for (let i = maxIndex; i >= 0; i--) {
+      this._siftDown(i);
+    }
+
+    return this.heap;
+  }
+
   private _siftUp(index: number): void {
     let parentIndex = this._getParentIndex(index);
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    while (index > 0 && this.heap[parentIndex] > this.heap[index]) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    while (
+      index > 0 &&
+      parentIndex &&
+      this.heap[parentIndex] > this.heap[index]
+    ) {
       this._swap(parentIndex, index);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       index = parentIndex;
       parentIndex = this._getParentIndex(index);
     }
