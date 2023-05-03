@@ -17,7 +17,16 @@ export class BinarySearchTree<T> {
   }
 
   public insert(data: T): void {
-    this._root = this._pointerReinforcementAdd(this._root, data);
+    this._root = this._rAdd(this._root, data);
+    this._size++;
+  }
+
+  public remove(data: T): void {
+    this._root = this._rRemove(this._root, data);
+  }
+
+  public contains(data: T): boolean {
+    return this._rContains(this._root, data);
   }
 
   public traverse(type: 'pre' | 'in' | 'post' = 'pre'): T[] {
@@ -28,17 +37,74 @@ export class BinarySearchTree<T> {
       : this._postOrderTransversal(this._root);
   }
 
-  private _pointerReinforcementAdd(
-    current: BSTNode<T> | null,
-    data: T,
-  ): BSTNode<T> {
+  private _rContains(current: BSTNode<T> | null, data: T): boolean {
     if (current === null) {
-      this._size++;
+      return false;
+    }
+
+    if (current.data < data) {
+      return this._rContains(current.right, data);
+    } else if (current.data > data) {
+      return this._rContains(current.left, data);
+    }
+
+    return true;
+  }
+
+  private _rRemove(current: BSTNode<T> | null, data: T): BSTNode<T> | null {
+    if (current === null) {
+      return null;
+    }
+
+    if (data < current.data) {
+      current.left = this._rRemove(current.left, data);
+      return current;
+    } else if (data > current.data) {
+      current.right = this._rRemove(current.right, data);
+      return current;
+    } else {
+      if (current.left === null && current.right === null) {
+        current = null;
+        return current;
+      }
+
+      if (current.left === null) {
+        current = current.right;
+        return current;
+      } else if (current.right === null) {
+        current = current.left;
+        return current;
+      }
+
+      const aux = this._findMin(current.right);
+      current.data = aux.data;
+      current.right = this._rRemove(current.right, aux.data);
+      return current;
+    }
+  }
+
+  private _findMin(current: BSTNode<T>): BSTNode<T> {
+    while (current !== null && current.left !== null) {
+      current = current.left;
+    }
+    return current;
+  }
+
+  private _rAdd(current: BSTNode<T> | null, data: T): BSTNode<T> {
+    if (current === null) {
       return new BSTNode<T>(data);
     } else if (data < current.data) {
-      current.left = this._pointerReinforcementAdd(current.left, data);
+      if (current.left === null) {
+        current.left = new BSTNode<T>(data);
+      } else {
+        current.left = this._rAdd(current.left, data);
+      }
     } else if (data > current.data) {
-      current.right = this._pointerReinforcementAdd(current.right, data);
+      if (current.right === null) {
+        current.right = new BSTNode<T>(data);
+      } else {
+        current.right = this._rAdd(current.right, data);
+      }
     }
     return current;
   }

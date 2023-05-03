@@ -44,4 +44,41 @@ describe('BinarySearchTree', () => {
     expect(tree.size).toBe(5);
     expect(tree.traverse('in')).toEqual([1, 2, 3, 4, 5]);
   });
+
+  it('should remove', () => {
+    const tree1 = generateNonEmptyTree();
+
+    tree1.remove(3);
+
+    expect(tree1.traverse('in')).toEqual([1, 2, 4, 5]);
+    expect(tree1.traverse('pre')).toEqual([4, 1, 2, 5]);
+    expect(tree1.traverse('post')).toEqual([2, 1, 5, 4]);
+
+    tree1.remove(1);
+    expect(tree1.traverse('in')).toEqual([2, 4, 5]);
+    expect(tree1.traverse('pre')).toEqual([4, 2, 5]);
+    expect(tree1.traverse('post')).toEqual([2, 5, 4]);
+
+    tree1.remove(0);
+    expect(tree1.traverse('in')).toEqual([2, 4, 5]);
+    expect(tree1.traverse('pre')).toEqual([4, 2, 5]);
+    expect(tree1.traverse('post')).toEqual([2, 5, 4]);
+
+    const tree2 = generateNonEmptyTree();
+
+    tree2.remove(5);
+
+    expect(tree2.traverse('in')).toEqual([1, 2, 3, 4]);
+    expect(tree2.traverse('pre')).toEqual([3, 1, 2, 4]);
+    expect(tree2.traverse('post')).toEqual([2, 1, 4, 3]);
+  });
+
+  it('should contains', () => {
+    const tree = generateNonEmptyTree();
+
+    expect(tree.contains(3)).toBe(true);
+    expect(tree.contains(1)).toBe(true);
+    expect(tree.contains(5)).toBe(true);
+    expect(tree.contains(-1)).toBe(false);
+  });
 });
