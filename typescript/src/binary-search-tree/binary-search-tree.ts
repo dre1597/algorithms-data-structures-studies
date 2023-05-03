@@ -10,15 +10,9 @@ class BSTNode<T> {
 
 export class BinarySearchTree<T> {
   private _root: BSTNode<T> | null = null;
-  private _size = 0;
-
-  get size(): number {
-    return this._size;
-  }
 
   public insert(data: T): void {
     this._root = this._rAdd(this._root, data);
-    this._size++;
   }
 
   public remove(data: T): void {
@@ -27,6 +21,10 @@ export class BinarySearchTree<T> {
 
   public contains(data: T): boolean {
     return this._rContains(this._root, data);
+  }
+
+  public clear(): void {
+    this._root = null;
   }
 
   public traverse(type: 'pre' | 'in' | 'post' = 'pre'): T[] {

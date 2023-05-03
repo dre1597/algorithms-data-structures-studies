@@ -25,23 +25,18 @@ describe('BinarySearchTree', () => {
     const tree = generateEmptyTree();
 
     tree.insert(3);
-    expect(tree.size).toBe(1);
     expect(tree.traverse('in')).toEqual([3]);
 
     tree.insert(1);
-    expect(tree.size).toBe(2);
     expect(tree.traverse('in')).toEqual([1, 3]);
 
     tree.insert(5);
-    expect(tree.size).toBe(3);
     expect(tree.traverse('in')).toEqual([1, 3, 5]);
 
     tree.insert(2);
-    expect(tree.size).toBe(4);
     expect(tree.traverse('in')).toEqual([1, 2, 3, 5]);
 
     tree.insert(4);
-    expect(tree.size).toBe(5);
     expect(tree.traverse('in')).toEqual([1, 2, 3, 4, 5]);
   });
 
@@ -80,5 +75,15 @@ describe('BinarySearchTree', () => {
     expect(tree.contains(1)).toBe(true);
     expect(tree.contains(5)).toBe(true);
     expect(tree.contains(-1)).toBe(false);
+  });
+
+  it('should clear', () => {
+    const tree = generateNonEmptyTree();
+
+    tree.clear();
+
+    expect(tree.traverse('in')).toEqual([]);
+    expect(tree.traverse('pre')).toEqual([]);
+    expect(tree.traverse('post')).toEqual([]);
   });
 });
