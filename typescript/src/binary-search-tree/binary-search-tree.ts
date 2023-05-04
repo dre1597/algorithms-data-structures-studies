@@ -1,4 +1,4 @@
-class BSTNode<T> {
+export class BSTNode<T> {
   data: T;
   left: BSTNode<T> | null = null;
   right: BSTNode<T> | null = null;
@@ -9,7 +9,7 @@ class BSTNode<T> {
 }
 
 export class BinarySearchTree<T> {
-  private _root: BSTNode<T> | null = null;
+  protected _root: BSTNode<T> | null = null;
 
   public insert(data: T): void {
     this._root = this._rAdd(this._root, data);
@@ -35,21 +35,33 @@ export class BinarySearchTree<T> {
       : this._postOrderTransversal(this._root);
   }
 
-  private _rContains(current: BSTNode<T> | null, data: T): boolean {
+  protected _rAdd(current: BSTNode<T> | null, data: T): BSTNode<T> {
     if (current === null) {
-      return false;
+      return new BSTNode<T>(data);
+    } else if (data < current.data) {
+      if (current.left === null) {
+        current.left = new BSTNode<T>(data);
+      } else {
+        current.left = this._rAdd(current.left, data);
+      }
+    } else if (data > current.data) {
+      if (current.right === null) {
+        current.right = new BSTNode<T>(data);
+      } else {
+        current.right = this._rAdd(current.right, data);
+      }
     }
-
-    if (current.data < data) {
-      return this._rContains(current.right, data);
-    } else if (current.data > data) {
-      return this._rContains(current.left, data);
-    }
-
-    return true;
+    return current;
   }
 
-  private _rRemove(current: BSTNode<T> | null, data: T): BSTNode<T> | null {
+  protected _findMin(current: BSTNode<T>): BSTNode<T> {
+    while (current !== null && current.left !== null) {
+      current = current.left;
+    }
+    return current;
+  }
+
+  protected _rRemove(current: BSTNode<T> | null, data: T): BSTNode<T> | null {
     if (current === null) {
       return null;
     }
@@ -81,30 +93,18 @@ export class BinarySearchTree<T> {
     }
   }
 
-  private _findMin(current: BSTNode<T>): BSTNode<T> {
-    while (current !== null && current.left !== null) {
-      current = current.left;
-    }
-    return current;
-  }
-
-  private _rAdd(current: BSTNode<T> | null, data: T): BSTNode<T> {
+  private _rContains(current: BSTNode<T> | null, data: T): boolean {
     if (current === null) {
-      return new BSTNode<T>(data);
-    } else if (data < current.data) {
-      if (current.left === null) {
-        current.left = new BSTNode<T>(data);
-      } else {
-        current.left = this._rAdd(current.left, data);
-      }
-    } else if (data > current.data) {
-      if (current.right === null) {
-        current.right = new BSTNode<T>(data);
-      } else {
-        current.right = this._rAdd(current.right, data);
-      }
+      return false;
     }
-    return current;
+
+    if (current.data < data) {
+      return this._rContains(current.right, data);
+    } else if (current.data > data) {
+      return this._rContains(current.left, data);
+    }
+
+    return true;
   }
 
   private _inOrderTraversal(node: BSTNode<T> | null, values: T[] = []): T[] {
