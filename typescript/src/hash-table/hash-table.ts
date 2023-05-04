@@ -21,10 +21,37 @@ export class HashTable<K, V> {
   public get(key: K): V | undefined {
     const position = this.hashCode(key);
 
-    const valuePair = this._table[position];
-    if (valuePair !== undefined) {
-      return valuePair.value;
+    const keyValuePair = this._table[position];
+    if (keyValuePair !== null && keyValuePair !== undefined) {
+      return keyValuePair.value;
     }
+  }
+
+  public remove(key: K): void {
+    const position = this.hashCode(key);
+    const keyValuePair = this._table[position];
+    if (keyValuePair !== null && keyValuePair !== undefined) {
+      delete this._table[position];
+    }
+  }
+
+  public size(): number {
+    return Object.keys(this._table).length;
+  }
+
+  public isEmpty(): boolean {
+    return this.size() === 0;
+  }
+
+  public clear(): void {
+    this._table = {};
+  }
+
+  public toString(): string {
+    if (this.isEmpty()) {
+      return '';
+    }
+    return JSON.stringify(this._table);
   }
 
   private hashCode(key: K): number {
