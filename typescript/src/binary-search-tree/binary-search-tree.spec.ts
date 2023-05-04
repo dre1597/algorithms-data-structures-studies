@@ -25,18 +25,23 @@ describe('BinarySearchTree', () => {
     const tree = generateEmptyTree();
 
     tree.insert(3);
+    expect(tree.contains(3)).toBe(true);
     expect(tree.traverse('in')).toEqual([3]);
 
     tree.insert(1);
+    expect(tree.contains(1)).toBe(true);
     expect(tree.traverse('in')).toEqual([1, 3]);
 
     tree.insert(5);
+    expect(tree.contains(5)).toBe(true);
     expect(tree.traverse('in')).toEqual([1, 3, 5]);
 
     tree.insert(2);
+    expect(tree.contains(2)).toBe(true);
     expect(tree.traverse('in')).toEqual([1, 2, 3, 5]);
 
     tree.insert(4);
+    expect(tree.contains(4)).toBe(true);
     expect(tree.traverse('in')).toEqual([1, 2, 3, 4, 5]);
   });
 
