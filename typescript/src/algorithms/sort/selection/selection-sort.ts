@@ -1,4 +1,4 @@
-export function selectionsort(array: number[]): number[] {
+export function selectionSort(array: number[]): number[] {
   const length = array.length;
 
   for (let i = 0; i < length - 1; i++) {

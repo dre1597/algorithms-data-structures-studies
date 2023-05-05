@@ -1,4 +1,4 @@
-export function bubblesort1(array: number[]): number[] {
+export function bubbleSort1(array: number[]): number[] {
   const length = array.length;
   for (let i = 0; i < length - 1; i++) {
     for (let j = 0; j < length - i - 1; j++) {
@@ -11,7 +11,7 @@ export function bubblesort1(array: number[]): number[] {
   return array;
 }
 
-export function bubblesort2(array: number[]): number[] {
+export function bubbleSort2(array: number[]): number[] {
   const length = array.length;
 
   for (let i = 0; i < length - 1; i++) {
