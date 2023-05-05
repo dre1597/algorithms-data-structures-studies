@@ -51,9 +51,6 @@ describe('b-tree', () => {
 
     bTree.insert(11);
     expect(bTree.contains(11)).toBe(true);
-
-    // bTree.insert(9);
-    // expect(bTree.contains(9)).toBe(true);
   });
 
   it('should get', () => {
@@ -64,5 +61,29 @@ describe('b-tree', () => {
 
     expect(bTree2.get(0)).toBeNull();
     expect(bTree2.get(1)).toBe(1);
+  });
+
+  it('should remove', () => {
+    const bTree1 = generateEmptyTree();
+
+    bTree1.remove(3);
+    expect(bTree1.contains(3)).toBe(false);
+
+    const bTree2 = generateNonEmptyTree();
+
+    bTree2.remove(3);
+    expect(bTree2.contains(3)).toBe(false);
+
+    bTree2.remove(1);
+    expect(bTree2.contains(1)).toBe(false);
+
+    bTree2.remove(2);
+    expect(bTree2.contains(2)).toBe(false);
+
+    bTree2.remove(4);
+    expect(bTree2.contains(4)).toBe(false);
+
+    bTree2.remove(5);
+    expect(bTree2.contains(5)).toBe(false);
   });
 });

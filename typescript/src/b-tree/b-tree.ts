@@ -17,7 +17,7 @@ class BTreeNode {
     if (this.isLeaf()) {
       this.items.splice(positionIndex, 0, item);
 
-      return this.fixInsert(max);
+      return this.checkShouldSplit(max);
     }
 
     const itemAndRightNode = this.children[positionIndex].insert(item, max);
@@ -26,10 +26,43 @@ class BTreeNode {
       this.items.splice(positionIndex, 0, itemAndRightNode[0]);
       this.children.splice(positionIndex + 1, 0, itemAndRightNode[1]);
 
-      return this.fixInsert(max);
+      return this.checkShouldSplit(max);
     }
 
     return null;
+  }
+
+  public remove(
+    item: number | null,
+    min: number,
+    replace?: [BTreeNode, number],
+  ): number | null {
+    const [positionIndex, found] = this.findPosition(item);
+
+    if (this.isLeaf()) {
+      let out: number | null = null;
+
+      if (found) {
+        out = this.items.splice(positionIndex, 1)[0];
+
+        if (replace) {
+          const [node, index] = replace;
+          node.items[index] = out;
+        }
+      }
+      return out;
+    }
+
+    const child = this.children[positionIndex];
+    const out = found
+      ? child.remove(null, min, [this, positionIndex])
+      : child.remove(item, min);
+
+    if (child.items.length < min) {
+      this._growChild(positionIndex, min);
+    }
+
+    return out;
   }
 
   public get(item: number): number | null {
@@ -56,7 +89,7 @@ class BTreeNode {
     return [i, value === this.items[i]];
   }
 
-  private fixInsert(max: number): [number, BTreeNode | null] {
+  private checkShouldSplit(max: number): [number, BTreeNode | null] {
     if (this.items.length <= max) {
       return null;
     }
@@ -79,39 +112,93 @@ class BTreeNode {
 
     return [item, right];
   }
+
+  private _growChild(index: number, min: number) {
+    if (index > 0 && this.children[index - 1].items.length > min) {
+      const child = this.children[index];
+      const getFrom = this.children[index];
+      const item = getFrom.items.pop();
+
+      child.items.splice(0, 0, this.items[index - 1]);
+
+      this.items[index - 1] = item;
+
+      if (!child.isLeaf()) {
+        child.children.splice(0, 0, getFrom.children.pop());
+      }
+    } else if (
+      index < this.items.length &&
+      this.children[index + 1].items.length > min
+    ) {
+      const child = this.children[index];
+      const getFrom = this.children[index + 1];
+      const item = getFrom.items.shift();
+
+      child.items.push(this.items[index]);
+
+      if (!child.isLeaf()) {
+        child.children.push(getFrom.children.shift());
+      }
+
+      this.items[index] = item;
+    } else {
+      if (index >= this.items.length) {
+        index--;
+      }
+
+      const child = this.children[index];
+      const mergeItem = this.items.splice(index, 1)[0];
+      const mergeChild = this.children.splice(index + 1, 1)[0];
+      child.children.push(...mergeChild.children);
+      child.items.push(mergeItem, ...mergeChild.items);
+      child.next = mergeChild.next;
+    }
+  }
 }
 
 export class Btree {
-  root: BTreeNode | null = null;
-  minOrder: number;
+  private _root: BTreeNode | null = null;
+  private readonly _minOrder: number;
 
   constructor(minOrder = 2) {
-    this.minOrder = minOrder;
+    this._minOrder = minOrder;
   }
 
-  insert(item: number): void {
-    if (this.root === null) {
-      this.root = new BTreeNode();
+  public insert(item: number): void {
+    if (this._root === null) {
+      this._root = new BTreeNode();
     }
 
-    const itemAndRightNode = this.root.insert(item, this.minOrder * 2 - 1);
+    const itemAndRightNode = this._root.insert(item, this._minOrder * 2 - 1);
 
     if (itemAndRightNode) {
-      const children = [this.root, itemAndRightNode[1]];
-      this.root = new BTreeNode([itemAndRightNode[0]]);
-      this.root.children = children;
+      const children = [this._root, itemAndRightNode[1]];
+      this._root = new BTreeNode([itemAndRightNode[0]]);
+      this._root.children = children;
     }
   }
 
-  get(item: number): number | null {
-    if (this.root === null) {
+  public remove(item: number): void {
+    if (!this._root) {
+      return;
+    }
+
+    this._root.remove(item, this._minOrder - 1);
+
+    if (this._root.items.length === 0) {
+      this._root = this._root.children[0] || null;
+    }
+  }
+
+  public get(item: number): number | null {
+    if (this._root === null) {
       return null;
     }
 
-    return this.root.get(item);
+    return this._root.get(item);
   }
 
-  contains(item: number): boolean {
+  public contains(item: number): boolean {
     return this.get(item) !== null;
   }
 }
